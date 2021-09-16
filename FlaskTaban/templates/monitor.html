@@ -1,0 +1,98 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/monitor.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+<h2><i class="fa fa-eye" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+<div id="console">
+    <pre class="banner">
+         _______ _            _     _______      _                 
+        (_______) |          | |   (_______)    | |                
+         _____  | | ____  ___| |  _ _       ____| | _   ____ ____  
+        |  ___) | |/ _  |/___) | / ) |     / _  | || \ / _  |  _ \ 
+        | |     | ( ( | |___ | |< (| |____( ( | | |_) | ( | | | | |
+        |_|     |_|\_||_(___/|_| \_)\______)_||_|____/ \_||_|_| |_|
+    </pre>
+    <table id="console-items">
+        <tr class="line">
+            <td class="darkgreen"></td>
+            <td class="blue"></td>
+            <td class="red">1</td>
+            <td class="green">||</td>
+            <td class="orange">2</td>
+            <td class="green">||</td>
+            <td class="cyan">3</td>
+            <td class="green">||</td>
+            <td class="purple">4</td>
+            <td class="green">||</td>
+            <td class="yellow">5</td>
+        </tr>
+        {% for log in loglar %}
+        <tr class="line">
+            <td class="darkgreen">[{{ log.tarih }}]</td>
+            <td class="blue">»</td>
+            <td class="red">{{ log.bir }}</td>
+            <td class="green">||</td>
+            <td class="orange">{{ log.iki }}</td>
+            <td class="green">||</td>
+            <td class="cyan">{{ log.uc }}</td>
+            <td class="green">||</td>
+            <td class="purple">{{ log.dort }}</td>
+            <td class="green">||</td>
+            <td class="yellow">{{ log.bes }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<hr />
+
+<ul style="margin-top: 10px;" class="actions special">
+    <li><a href="/cikis_yap" class="button"><i class="fa fa-sign-out" aria-hidden="true"></i> Çıkış Yap</a></li>
+</ul>
+
+<script>
+    document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+    var eldeki_veri = null;
+    setInterval(() => {
+        $.ajax({
+            type: "POST",
+            url: "/monitor",
+            success: function (data) {
+                if (data != null) {
+                    if (eldeki_veri != data.tarih) {
+                        if (data.tarih) {
+                            $('#console-items').append(`
+                                <tr class="line">
+                                    <td class="darkgreen">[` + data.tarih + `]</td>
+                                    <td class="blue">»</td>
+                                    <td class="red">` + data.bir + `</td>
+                                    <td class="green">||</td>
+                                    <td class="orange">` + data.iki + `</td>
+                                    <td class="green">||</td>
+                                    <td class="cyan">` + data.uc + `</td>
+                                    <td class="green">||</td>
+                                    <td class="purple">` + data.dort + `</td>
+                                    <td class="green">||</td>
+                                    <td class="yellow">` + data.bes + `</td>
+                                </tr>
+                            `)
+                            eldeki_veri = data.tarih
+                            // console.log(eldeki_veri);
+                            document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+                        }
+                    }
+                }
+            },
+            error: function () {
+                window.location.href = "/cikis_yap";
+            }
+        })
+    }, 2000);
+</script>
+
+{% endblock %}

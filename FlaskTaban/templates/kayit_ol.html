@@ -1,0 +1,36 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<h2><i class="fa fa-key" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+ {% if hata %}
+    <div class="alert alert-danger" role="alert">
+        <h3 style="color:black">{{ hata }}</h3>
+    </div>
+    <hr />
+ {% endif %}
+
+<form method="post" action="#">
+    <div class="fields">
+        <div class="field">
+            <input type="text" name="name" id="name" placeholder="İsim Soyisim" />
+        </div>
+        <div class="field">
+            <input type="text" name="username" id="username" placeholder="Kullanıcı Adı" />
+        </div>
+        <div class="field">
+            <input type="mail" name="mail" id="mail" placeholder="E-Posta Adresi" />
+        </div>
+        <div class="field">
+            <input type="password" name="password" id="password" placeholder="Şifre" />
+        </div>
+    </div>
+    <ul class="actions special">
+        <li><button type='submit'><i class="fa fa-key" aria-hidden="true"></i> Kayıt Ol</button></li>
+        <li><a href="/giris_yap" class="button"><i class="fa fa-sign-in" aria-hidden="true"></i> Giriş Yap</a></li>
+    </ul>
+</form>
+
+{% endblock %}
